@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>循迹模块数据可视化</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 20px;
+            padding: 30px;
+            min-height: calc(100vh - 250px);
+        }
+
+        @media (max-width: 1200px) {
+            .content {
+                grid-template-columns: 1fr 280px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 15px;
+            }
+        }
+
+        .chart-container {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            min-height: 450px;
+        }
+
+        #chart {
+            width: 100%;
+            height: 400px;
+        }
+
+        @media (max-width: 1024px) {
+            .chart-container {
+                min-height: 350px;
+            }
+
+            #chart {
+                height: 300px;
+            }
+        }
+
+        .control-panel {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-height: calc(100vh - 250px);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .control-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .control-panel::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .control-panel::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .control-panel::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .control-panel h3 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        .section-box {
+            background: white;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section-box h4 {
+            color: #333;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+            margin-left: -12px;
+            margin-right: -12px;
+            margin-top: -12px;
+            padding: 8px 12px;
+            background: #f9f9f9;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        .form-group label {
+            width: 60px;
+            color: #666;
+            font-size: 0.85em;
+            flex-shrink: 0;
+        }
+
+        .form-group select {
+            flex: 1;
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.85em;
+            background: white;
+            cursor: pointer;
+            min-width: 0;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-small {
+            padding: 6px 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-small:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-1px);
+        }
+
+        .btn-small:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+            background: white;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .status-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .status-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .status-connected {
+            border-left-color: #4caf50;
+        }
+
+        .status-connected .status-indicator {
+            background: #4caf50;
+        }
+
+        .status-disconnected {
+            border-left-color: #f44336;
+        }
+
+        .status-disconnected .status-indicator {
+            background: #f44336;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .button-group button {
+            padding: 10px 12px;
+            font-size: 0.95em;
+        }
+
+        button {
+            padding: 12px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        button:disabled:hover {
+            transform: none !important;
+            box-shadow: none !important;
+            background: inherit;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #da190b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-full {
+            grid-column: 1 / -1;
+        }
+
+        .data-stats {
+            background: white;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9em;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: #666;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .message-box {
+            background: white;
+            border-radius: 6px;
+            padding: 8px;
+            margin-top: 8px;
+            font-size: 0.75em;
+            color: #666;
+            max-height: 80px;
+            overflow-y: auto;
+            border-left: 3px solid #ff9800;
+            line-height: 1.3;
+        }
+
+        .message-box::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .message-box::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 2px;
+        }
+
+        .message-log-container {
+            background: white;
+            border-top: 2px solid #667eea;
+            padding: 15px 30px;
+        }
+
+        .message-log-header {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .message-log-container .message-box {
+            margin: 0;
+            max-height: 150px;
+            font-size: 0.8em;
+        }
+
+        .footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: loading 1.4s infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes loading {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .connection-message {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .message-success {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .message-error {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 循迹模块数据可视化</h1>
+            <p>实时ADC数据监测与分析系统</p>
+        </div>
+
+        <div class="content">
+            <div class="chart-container">
+                <div id="chart"></div>
+            </div>
+
+            <div class="control-panel">
+                <h3>控制面板</h3>
+
+                <div id="connectionMessage"></div>
+
+                <!-- 串口连接设置 -->
+                <div class="section-box">
+                    <h4>串口设置</h4>
+
+                    <div class="form-group">
+                        <label>选择串口：</label>
+                        <select id="portSelect">
+                            <option value="">--请选择--</option>
+                        </select>
+                        <button class="btn-small" onclick="refreshPorts()">刷新</button>
+                    </div>
+
+                    <div style="font-size: 0.75em; color: #999; margin-bottom: 10px;">
+                        💡 选中的设备信息：<span id="portInfo">未选择</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>波特率：</label>
+                        <select id="baudSelect">
+                            <option value="9600">9600</option>
+                            <option value="19200">19200</option>
+                            <option value="38400">38400</option>
+                            <option value="57600">57600</option>
+                            <option value="115200" selected>115200</option>
+                            <option value="230400">230400</option>
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-primary" id="connectBtn" onclick="connectSerial()">连接</button>
+                        <button class="btn-danger" id="disconnectBtn" onclick="disconnectSerial()" disabled>断开</button>
+                    </div>
+
+                    <div class="status-box" id="statusBox">
+                        <div class="status-label">连接状态</div>
+                        <div class="status-value">
+                            <span class="status-indicator"></span>
+                            <span id="statusText">未连接</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数据采集控制 -->
+                <div class="section-box">
+                    <h4>数据采集</h4>
+
+                    <div class="status-box">
+                        <div class="status-label">采集状态</div>
+                        <div class="status-value" id="captureStatus">未开始<span class="loading"></span></div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-primary" id="startBtn" onclick="startCapture()" disabled>开始采集</button>
+                        <button class="btn-danger" id="stopBtn" onclick="stopCapture()" disabled>停止采集</button>
+                    </div>
+
+                    <button class="btn-danger btn-full" onclick="clearData()">清除所有数据</button>
+                </div>
+
+                <!-- 数据统计 -->
+                <div class="data-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">当前值</span>
+                        <span class="stat-value" id="currentValue">--</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">最大值</span>
+                        <span class="stat-value" id="maxValue">--</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">最小值</span>
+                        <span class="stat-value" id="minValue">--</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">平均值</span>
+                        <span class="stat-value" id="avgValue">--</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">数据点数</span>
+                        <span class="stat-value" id="dataCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 消息日志 - 放在最下面 -->
+        <div class="message-log-container">
+            <div class="message-log-header">📋 操作日志</div>
+            <div class="message-box" id="messageBox">
+                系统就绪，请先选择串口并连接...
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>循迹模块串口数据可视化 v1.0 | 实时监测系统 | 最多显示200个数据点</p>
+        </div>
+    </div>
+
+    <script>
+        // Socket.io 连接配置
+        const socket = io();
+        let chart = null;
+        let chartData = {
+            times: [],
+            values: [],
+            statuses: []
+        };
+
+        // 初始化图表
+        function initChart() {
+            const chartContainer = document.getElementById('chart');
+            chart = echarts.init(chartContainer);
+
+            const option = {
+                title: {
+                    text: 'ADC值实时曲线',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function(params) {
+                        if (params.length > 0) {
+                            const param = params[0];
+                            const dataIndex = param.dataIndex;
+                            if (dataIndex >= 0 && dataIndex < chartData.statuses.length) {
+                                const status = chartData.statuses[dataIndex];
+                                const statusText = status === 'black' ? '黑线' : '白线';
+                                return `
+                                    <div style="padding: 8px;">
+                                        <div>时间: ${chartData.times[dataIndex]}</div>
+                                        <div>ADC值: <strong>${param.value}</strong></div>
+                                        <div>状态: <strong>${statusText}</strong></div>
+                                    </div>
+                                `;
+                            }
+                        }
+                        return '';
+                    }
+                },
+                grid: {
+                    left: '10%',
+                    right: '5%',
+                    bottom: '10%',
+                    top: '15%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: chartData.times,
+                    boundaryGap: false,
+                    axisLabel: {
+                        fontSize: 10,
+                        hideOverlap: true
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'ADC值',
+                    min: 0,
+                    max: 4095,
+                    splitLine: {
+                        lineStyle: {
+                            type: 'dashed'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: 'ADC值',
+                        type: 'line',
+                        data: chartData.values,
+                        smooth: true,
+                        lineStyle: {
+                            width: 2,
+                            color: '#667eea'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(102, 126, 234, 0.3)' },
+                                { offset: 1, color: 'rgba(102, 126, 234, 0.1)' }
+                            ])
+                        },
+                        itemStyle: {
+                            color: '#667eea',
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        symbol: 'circle',
+                        symbolSize: 4
+                    }
+                ]
+            };
+
+            chart.setOption(option);
+        }
+
+        // 更新图表数据
+        function updateChart() {
+            if (chart) {
+                chart.setOption({
+                    xAxis: {
+                        data: chartData.times
+                    },
+                    series: [
+                        {
+                            data: chartData.values
+                        }
+                    ]
+                });
+            }
+        }
+
+        // 更新统计数据
+        function updateStats() {
+            const values = chartData.values;
+            const count = values.length;
+
+            if (count > 0) {
+                const current = values[values.length - 1];
+                const max = Math.max(...values);
+                const min = Math.min(...values);
+                const avg = (values.reduce((a, b) => a + b, 0) / count).toFixed(2);
+
+                document.getElementById('currentValue').textContent = current;
+                document.getElementById('maxValue').textContent = max;
+                document.getElementById('minValue').textContent = min;
+                document.getElementById('avgValue').textContent = avg;
+                document.getElementById('dataCount').textContent = count;
+            }
+        }
+
+        // 获取可用的串口
+        function refreshPorts() {
+            addMessage('正在扫描可用串口...', 'info');
+            socket.emit('get_available_ports');
+        }
+
+        // 当选择串口时显示其信息
+        document.addEventListener('DOMContentLoaded', () => {
+            const portSelect = document.getElementById('portSelect');
+            if (portSelect) {
+                portSelect.addEventListener('change', (e) => {
+                    const port = e.target.selectedOptions[0];
+                    if (port.value) {
+                        document.getElementById('portInfo').textContent = port.text;
+                    } else {
+                        document.getElementById('portInfo').textContent = '未选择';
+                    }
+                });
+            }
+        });
+
+        // 连接到选定的串口
+        function connectSerial() {
+            const port = document.getElementById('portSelect').value;
+            const baud = parseInt(document.getElementById('baudSelect').value);
+
+            if (!port) {
+                addMessage('请先选择一个串口', 'error');
+                return;
+            }
+
+            addMessage(`正在连接到 ${port}...`, 'info');
+            socket.emit('connect_port', {
+                port: port,
+                baud_rate: baud
+            });
+        }
+
+        // 断开串口连接
+        function disconnectSerial() {
+            socket.emit('disconnect_port');
+        }
+
+        // Socket.io 事件处理
+        socket.on('connect', () => {
+            console.log('已连接到服务器');
+            // 页面加载时获取可用的串口
+            setTimeout(() => {
+                refreshPorts();
+            }, 500);
+        });
+
+        socket.on('available_ports', (data) => {
+            const portSelect = document.getElementById('portSelect');
+            const ports = data.ports;
+
+            // 清空现有选项（除了第一个占位符）
+            while (portSelect.options.length > 1) {
+                portSelect.remove(1);
+            }
+
+            if (ports.length === 0) {
+                addMessage('❌ 没有找到可用的串口设备', 'warn');
+                return;
+            }
+
+            // 识别USB转TTL设备
+            ports.forEach(port => {
+                const option = document.createElement('option');
+                option.value = port.port;
+
+                // 生成友好的显示文本
+                let displayText = port.port;
+
+                // 检查是否是USB设备
+                if (port.hwid && port.hwid.includes('USB')) {
+                    // 识别常见的USB转TTL芯片
+                    if (port.hwid.includes('CH340')) {
+                        displayText += ' 🔌 CH340 (USB转TTL)';
+                    } else if (port.hwid.includes('PL2303')) {
+                        displayText += ' 🔌 PL2303 (USB转TTL)';
+                    } else if (port.hwid.includes('FT232')) {
+                        displayText += ' 🔌 FT232 (USB转TTL)';
+                    } else if (port.hwid.includes('CP210')) {
+                        displayText += ' 🔌 CP2102 (USB转TTL)';
+                    } else {
+                        displayText += ' 🔌 USB设备';
+                    }
+                }
+
+                // 添加描述
+                if (port.description) {
+                    displayText += ` - ${port.description}`;
+                }
+
+                option.textContent = displayText;
+                portSelect.appendChild(option);
+            });
+
+            addMessage(`✓ 找到 ${ports.length} 个可用串口`, 'info');
+
+            // 如果有之前的连接，尝试恢复
+            if (data.current_port) {
+                portSelect.value = data.current_port;
+                document.getElementById('portInfo').textContent = portSelect.selectedOptions[0].text;
+            }
+        });
+
+        socket.on('connection_status', (data) => {
+            const statusBox = document.getElementById('statusBox');
+            const statusText = document.getElementById('statusText');
+            const messageDiv = document.getElementById('connectionMessage');
+            const connectBtn = document.getElementById('connectBtn');
+            const disconnectBtn = document.getElementById('disconnectBtn');
+            const startBtn = document.getElementById('startBtn');
+            const stopBtn = document.getElementById('stopBtn');
+
+            if (data.status) {
+                statusBox.classList.remove('status-disconnected');
+                statusBox.classList.add('status-connected');
+                statusText.textContent = `已连接 (${data.port || 'COM'})`;
+
+                const msg = `<div class="connection-message message-success">✓ ${data.message}</div>`;
+                messageDiv.innerHTML = msg;
+
+                connectBtn.disabled = true;
+                disconnectBtn.disabled = false;
+                startBtn.disabled = false;  // 连接成功后启用开始采集
+                stopBtn.disabled = true;
+
+                addMessage('✓ 连接成功，可以开始采集了', 'info');
+            } else {
+                statusBox.classList.remove('status-connected');
+                statusBox.classList.add('status-disconnected');
+                statusText.textContent = '未连接';
+
+                const msg = `<div class="connection-message message-error">✗ ${data.message}</div>`;
+                messageDiv.innerHTML = msg;
+
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+                startBtn.disabled = true;  // 未连接时禁用开始采集
+                stopBtn.disabled = true;
+
+                addMessage('✗ 连接已断开', 'warn');
+            }
+        });
+
+        socket.on('data_update', (data) => {
+            chartData.times.push(data.time);
+            chartData.values.push(data.value);
+            chartData.statuses.push(data.status || 'white');
+
+            // 只保留最近50个数据点
+            if (chartData.times.length > 50) {
+                chartData.times.shift();
+                chartData.values.shift();
+                chartData.statuses.shift();
+            }
+
+            updateChart();
+            updateStats();
+        });
+
+        socket.on('history_data', (data) => {
+            console.log('接收历史数据:', data.length, '个点');
+            if (data && data.length > 0) {
+                data.forEach(point => {
+                    chartData.times.push(point.time);
+                    chartData.values.push(point.value);
+                    chartData.statuses.push(point.status || 'white');
+                });
+                updateChart();
+                updateStats();
+                addMessage(`已加载 ${data.length} 个历史数据点`, 'info');
+            }
+        });
+
+        socket.on('capture_status', (data) => {
+            const captureStatus = document.getElementById('captureStatus');
+            const startBtn = document.getElementById('startBtn');
+            const stopBtn = document.getElementById('stopBtn');
+
+            if (data.status === 'running') {
+                captureStatus.innerHTML = '采集中<span class="loading"></span>';
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                addMessage('数据采集已开始', 'info');
+            } else {
+                captureStatus.innerHTML = '已停止';
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                addMessage('数据采集已停止', 'info');
+            }
+        });
+
+        socket.on('data_cleared', () => {
+            chartData.times = [];
+            chartData.values = [];
+            chartData.statuses = [];
+            updateChart();
+            updateStats();
+            addMessage('所有数据已清除', 'warn');
+        });
+
+        socket.on('debug_info', (data) => {
+            // 显示诊断面板
+            document.getElementById('debugSection').style.display = 'block';
+            document.getElementById('rawData').textContent = data.raw_line.substring(0, 50);
+            document.getElementById('hexData').textContent = data.hex.substring(0, 80);
+        });
+
+        socket.on('error', (data) => {
+            addMessage(`错误: ${data.message}`, 'error');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('已断开连接');
+            addMessage('与服务器的连接已断开', 'error');
+        });
+
+        // 按钮事件处理
+        function startCapture() {
+            socket.emit('start_capture');
+        }
+
+        function stopCapture() {
+            socket.emit('stop_capture');
+        }
+
+        function clearData() {
+            if (confirm('确定要清除所有数据吗？')) {
+                socket.emit('clear_data');
+            }
+        }
+
+        // 消息提示
+        function addMessage(msg, type = 'info') {
+            const messageBox = document.getElementById('messageBox');
+            const timestamp = new Date().toLocaleTimeString('zh-CN');
+            const icon = type === 'error' ? '❌' : type === 'warn' ? '⚠️' : 'ℹ️';
+            messageBox.innerHTML = `${icon} [${timestamp}] ${msg}<br>` + messageBox.innerHTML;
+
+            // 只保留最近10条消息
+            const lines = messageBox.innerHTML.split('<br>');
+            if (lines.length > 10) {
+                messageBox.innerHTML = lines.slice(0, 10).join('<br>');
+            }
+        }
+
+        // 页面加载时初始化
+        window.addEventListener('load', () => {
+            initChart();
+            addMessage('系统就绪，请选择串口并连接...', 'info');
+        });
+
+        // 响应式处理
+        window.addEventListener('resize', () => {
+            if (chart) {
+                chart.resize();
+            }
+        });
+    </script>
+</body>
+</html>

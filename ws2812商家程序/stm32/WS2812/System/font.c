@@ -1,0 +1,12 @@
+#include "font.h"
+#include <stdint.h>  // 确保uint8_t定义
+
+const uint8_t Font6x8[8][6] = {
+    {0x00,0x00,0x00,0x00,0x00,0x00}, // 空格
+    // ...其他字模数据
+};
+
+const uint8_t ChineseFont[16][32] = {
+			{0x00,0x00,0x00,0x00,0x00,0x00},
+};
+

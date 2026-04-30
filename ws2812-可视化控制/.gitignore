@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+_temp_controller.py
+_temp_config.py
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# WCH Studio / IAR (编译输出)
+.settings/
+.spec-workflow/
+.mrs/
+obj/
+Debug/
+Release/
+
+# 以下文件需要保留用于项目打开和烧录
+# .project
+# .cproject
+# *.wvproj
+# *.launch
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Build artifacts
+*.o
+*.d
+*.hex
+*.bin
+*.elf
+
+# Logs
+*.log

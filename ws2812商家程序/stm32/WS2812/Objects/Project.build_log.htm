@@ -1,0 +1,142 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.43.1.0
+Copyright (C) 2025 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 weijiahong, 11, LIC=X96CK-ZZHVR-GKNBG-V3WNY-2BWKN-89EAL
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.43.0.0
+Toolchain Path:  D:\Keil_v5\ARM\ARMCLANG\Bin
+C Compiler:      ArmClang.exe V6.24
+Assembler:       Armasm.exe V6.24
+Linker/Locator:  ArmLink.exe V6.24
+Library Manager: ArmAr.exe V6.24
+Hex Converter:   FromElf.exe V6.24
+CPU DLL:         SARMCM3.DLL V5.43.0.0
+Dialog DLL:      DCM.DLL V1.17.5.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.3.1.0
+Dialog DLL:      TCM.DLL V1.56.6.0
+ 
+<h2>Project:</h2>
+C:\Users\weijiahong\Desktop\1Î»WS2812\³ÌÐò\stm32\WS2812\Project.uvprojx
+Project File Date:  04/27/2026
+
+<h2>Output:</h2>
+*** Using Compiler 'V6.24', folder: 'D:\Keil_v5\ARM\ARMCLANG\Bin'
+Rebuild target 'Target 1'
+assembling startup_stm32f10x_md.s...
+Start/core_cm3.c(445): error: non-ASM statement in naked function is not supported
+  445 |   uint32_t result=0;
+      |   ^
+Start/core_cm3.c(442): note: attribute is here
+  442 | uint32_t __get_PSP(void) __attribute__( ( naked ) );
+      |                                           ^
+Start/core_cm3.c(465): error: parameter references not allowed in naked functions
+  465 |                   "BX  lr     \n\t" : : "r" (topOfProcStack) );
+      |                                              ^
+Start/core_cm3.c(461): note: attribute is here
+  461 | void __set_PSP(uint32_t topOfProcStack) __attribute__( ( naked ) );
+      |                                                          ^
+Start/core_cm3.c(479): error: non-ASM statement in naked function is not supported
+  479 |   uint32_t result=0;
+      |   ^
+Start/core_cm3.c(476): note: attribute is here
+  476 | uint32_t __get_MSP(void) __attribute__( ( naked ) );
+      |                                           ^
+Start/core_cm3.c(499): error: parameter references not allowed in naked functions
+  499 |                   "BX  lr     \n\t" : : "r" (topOfMainStack) );
+      |                                              ^
+Start/core_cm3.c(495): note: attribute is here
+  495 | void __set_MSP(uint32_t topOfMainStack) __attribute__( ( naked ) );
+      |                                                          ^
+4 errors generated.
+compiling core_cm3.c...
+compiling stm32f10x_bkp.c...
+compiling system_stm32f10x.c...
+compiling stm32f10x_crc.c...
+compiling stm32f10x_dbgmcu.c...
+compiling misc.c...
+compiling stm32f10x_cec.c...
+compiling stm32f10x_dma.c...
+compiling stm32f10x_adc.c...
+compiling stm32f10x_dac.c...
+compiling stm32f10x_exti.c...
+compiling stm32f10x_can.c...
+compiling stm32f10x_fsmc.c...
+compiling stm32f10x_iwdg.c...
+compiling stm32f10x_pwr.c...
+compiling stm32f10x_gpio.c...
+compiling stm32f10x_i2c.c...
+compiling stm32f10x_rtc.c...
+compiling stm32f10x_sdio.c...
+compiling stm32f10x_rcc.c...
+compiling stm32f10x_spi.c...
+compiling stm32f10x_flash.c...
+compiling stm32f10x_usart.c...
+System/Delay.c(6): error: call to undeclared function '__nop'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    6 |         __nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();
+      |         ^
+1 error generated.
+compiling Delay.c...
+compiling stm32f10x_wwdg.c...
+System/usart.c(5): error: '#pragma import' is an Arm Compiler 5 extension, and is not supported by Arm Compiler for Embedded 6 [-Warmcc-pragma-import]
+    5 | #pragma import(__use_no_semihosting)             
+      |         ^
+System/usart.c(7): error: redefinition of '__FILE'
+    7 | struct __FILE 
+      |        ^
+D:\Keil_v5\ARM\ARMCLANG\bin\..\include\stdio.h(119): note: previous definition is here
+  119 | struct __FILE {
+      |        ^
+System/usart.c(22): warning: while loop has empty body [-Wempty-body]
+   22 |         while((USART1->SR&0X40)==0);//Ñ­<BB><B7><B7><A2><CB><CD>,Ö±<B5><BD><B7><A2><CB><CD><CD><EA><B1><CF>   
+      |                                    ^
+System/usart.c(22): note: put the semicolon on a separate line to silence this warning
+1 warning and 2 errors generated.
+compiling usart.c...
+System/sys.c(19): error: expected '(' after 'asm'
+   19 | __asm void MSR_MSP(u32 addr) 
+      |       ^
+System/sys.c(19): error: expected ';' after top-level asm block
+   19 | __asm void MSR_MSP(u32 addr) 
+      |      ^
+      |      ;
+System/sys.c(21): error: use of undeclared identifier 'MSR'
+   21 |     MSR MSP, r0                         //set Main Stack value
+      |     ^
+3 errors generated.
+compiling sys.c...
+compiling stm32f10x_tim.c...
+compiling TIM.c...
+System/HC14D.c(27): warning: illegal character encoding in string literal [-Winvalid-source-encoding]
+   27 |                 printf("<B4><A5><B7><A2>\r\n");
+      |                         ^~~~~~~~~~~~~~~~
+1 warning generated.
+compiling HC14D.c...
+compiling iic.c...
+compiling mlx90614.c...
+compiling ws2812.c...
+compiling main.c...
+compiling OLED.c...
+compiling stm32f10x_it.c...
+".\Objects\Project.axf" - 10 Error(s), 2 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                https://www.keil.com/pack/Keil.STM32F1xx_DFP.2.4.1.pack
+                Keil::STM32F1xx_DFP@2.4.1
+                STMicroelectronics STM32F1 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  D:/Keil_v5/ARM/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include
+
+<h2>Collection of Component Files used:</h2>
+Target not created.
+Build Time Elapsed:  00:00:01
+</pre>
+</body>
+</html>
