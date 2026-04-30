@@ -5,6 +5,7 @@ This repository contains the project source directories extracted from the local
 Project layout:
 
 - `360度舵机`
+- `AI+usart(串口助手)`
 - `BSP_Drive-网络资料-ws2812`
 - `ch32已验证流水灯`
 - `ws2812-可视化控制`

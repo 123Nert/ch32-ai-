@@ -4,6 +4,7 @@
 .settings/
 .spec-workflow/
 __pycache__/
+node_modules/
 Debug/
 obj/
 原理图/
@@ -21,4 +22,5 @@ obj/
 *.uvoptx
 *.tmp
 *.log
-
+*.png
+*.pdf

@@ -1,0 +1,12 @@
+{
+  "name": "web-serial-assistant",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local web serial assistant with COM port detection and waveform display.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "serialport": "^13.0.0"
+  }
+}

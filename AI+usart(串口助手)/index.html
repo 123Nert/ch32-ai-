@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>串口助手</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark">USART</span>
+          <div>
+            <h1>网页版串口助手</h1>
+            <p id="supportText">正在检测浏览器串口能力...</p>
+          </div>
+        </div>
+
+        <section class="connection-strip" aria-label="串口连接设置">
+          <label>
+            <span>常见波特率</span>
+            <select id="baudSelect">
+              <option value="9600">9600</option>
+              <option value="19200">19200</option>
+              <option value="38400">38400</option>
+              <option value="57600">57600</option>
+              <option value="115200" selected>115200</option>
+              <option value="230400">230400</option>
+              <option value="460800">460800</option>
+              <option value="921600">921600</option>
+              <option value="1000000">1000000</option>
+              <option value="2000000">2000000</option>
+              <option value="custom">自定义</option>
+            </select>
+          </label>
+
+          <label>
+            <span>自定义波特率</span>
+            <input id="baudInput" type="number" min="1" step="1" value="115200" inputmode="numeric" />
+          </label>
+
+          <label>
+            <span>数据位</span>
+            <select id="dataBits">
+              <option value="8" selected>8</option>
+              <option value="7">7</option>
+            </select>
+          </label>
+
+          <label>
+            <span>停止位</span>
+            <select id="stopBits">
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+            </select>
+          </label>
+
+          <label>
+            <span>校验</span>
+            <select id="parity">
+              <option value="none" selected>None</option>
+              <option value="even">Even</option>
+              <option value="odd">Odd</option>
+            </select>
+          </label>
+
+          <label>
+            <span>流控</span>
+            <select id="flowControl">
+              <option value="none" selected>None</option>
+              <option value="hardware">Hardware</option>
+            </select>
+          </label>
+
+          <label class="device-filter-field">
+            <span>COM 口</span>
+            <select id="portSelect">
+              <option value="">正在扫描 COM 口...</option>
+            </select>
+          </label>
+
+          <div class="connect-actions">
+            <span>串口端口</span>
+            <div class="connect-buttons">
+              <button id="refreshPortsBtn">刷新 COM</button>
+              <button id="connectBtn" class="primary">选择并连接串口</button>
+              <button id="disconnectBtn" disabled>断开串口</button>
+            </div>
+          </div>
+        </section>
+      </header>
+
+      <section class="status-row" aria-live="polite">
+        <span id="connectionStatus" class="status-pill is-idle">未连接</span>
+        <span id="portInfo">等待选择串口</span>
+        <span id="byteStats">RX 0 B / TX 0 B</span>
+        <span id="sampleStats">波形点 0</span>
+      </section>
+
+      <section class="workspace">
+        <section class="panel terminal-panel" aria-label="串口打印内容">
+          <div class="panel-header">
+            <div>
+              <h2>实时打印</h2>
+              <p>串口收到的文本会显示在这里</p>
+            </div>
+            <div class="tool-row">
+              <label class="toggle">
+                <input id="timestampToggle" type="checkbox" />
+                <span>时间戳</span>
+              </label>
+              <label class="toggle">
+                <input id="autoscrollToggle" type="checkbox" checked />
+                <span>自动滚动</span>
+              </label>
+              <button id="clearLogBtn">清空</button>
+              <button id="exportLogBtn">导出</button>
+            </div>
+          </div>
+
+          <pre id="logView" class="log-view" aria-label="串口日志"></pre>
+
+          <div class="send-strip">
+            <input id="sendInput" type="text" placeholder="输入要发送的串口命令" autocomplete="off" />
+            <select id="lineEnding" aria-label="行尾格式">
+              <option value="">无行尾</option>
+              <option value="\n" selected>LF</option>
+              <option value="\r\n">CRLF</option>
+              <option value="\r">CR</option>
+            </select>
+            <label class="toggle">
+              <input id="echoTxToggle" type="checkbox" checked />
+              <span>显示发送</span>
+            </label>
+            <button id="sendBtn" class="primary" disabled>发送</button>
+          </div>
+        </section>
+
+        <section class="panel wave-panel" aria-label="实时波形">
+          <div class="panel-header">
+            <div>
+              <h2>实时波形</h2>
+              <p>自动从每行串口数据中提取数字</p>
+            </div>
+            <div class="tool-row">
+              <button id="pauseWaveBtn">暂停</button>
+              <button id="clearWaveBtn">清空</button>
+            </div>
+          </div>
+
+          <div class="wave-options">
+            <label class="toggle">
+              <input id="autoScaleToggle" type="checkbox" checked />
+              <span>自动缩放</span>
+            </label>
+            <label>
+              <span>Y 最小</span>
+              <input id="yMinInput" type="number" value="-100" />
+            </label>
+            <label>
+              <span>Y 最大</span>
+              <input id="yMaxInput" type="number" value="100" />
+            </label>
+            <label>
+              <span>保留点数</span>
+              <input id="maxPointsInput" type="number" min="50" max="20000" step="50" value="1000" />
+            </label>
+          </div>
+
+          <div class="chart-wrap">
+            <canvas id="waveCanvas"></canvas>
+            <div id="emptyWaveHint" class="empty-hint">等待串口数值数据</div>
+          </div>
+
+          <div class="channel-area">
+            <div class="channel-title">通道</div>
+            <div id="channelList" class="channel-list"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
