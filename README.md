@@ -12,7 +12,7 @@ Project layout:
 - `ws2812商家程序`
 - `ws2812商家程序/循迹传感器51测试程序`
 - `循迹模块-网页端数据图`
-- `第二讲——循迹模块test`
+- `循迹模块test`
 
 Excluded from upload:
 
