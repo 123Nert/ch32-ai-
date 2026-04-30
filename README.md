@@ -2,7 +2,7 @@
 
 This repository contains the project source directories extracted from the local `AI+ch32+多模块` workspace.
 
-Included projects:
+Project layout:
 
 - `360度舵机`
 - `BSP_Drive-网络资料-ws2812`
@@ -10,7 +10,7 @@ Included projects:
 - `ws2812-可视化控制`
 - `ws2812-多种流水`
 - `ws2812商家程序`
-- `循迹传感器51测试程序`
+- `ws2812商家程序/循迹传感器51测试程序`
 - `循迹模块-网页端数据图`
 - `第二讲——循迹模块test`
 
