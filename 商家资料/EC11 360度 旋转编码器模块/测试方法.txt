@@ -1,0 +1,5 @@
+给LCTS-LCD烧程序
+\STM8S-IAR\Project\Debug\Exe\ENCODE.hex
+烧完屏幕上会显示500。
+接线，从烧写端口给LCTS-LCD供电。 7P白色座子靠近缺口这边1脚是VCC接EC11的VCC，4脚接A,5脚接GND，6脚接B.
+旋动EC11，顺时针数字变大，逆时针变小。

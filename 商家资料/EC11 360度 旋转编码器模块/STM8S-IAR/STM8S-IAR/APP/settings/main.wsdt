@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>DEMO/Debug</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>251</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><ColumnWidth0>20</ColumnWidth0><ColumnWidth1>824</ColumnWidth1><ColumnWidth2>362</ColumnWidth2><ColumnWidth3>61</ColumnWidth3></Build>
+    <TerminalIO/></Static>
+    <Windows>
+      
+      
+    <Wnd2>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-15664-8348</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>DEMO</ExpandedNode><ExpandedNode>DEMO/APP</ExpandedNode><ExpandedNode>DEMO/Libraries</ExpandedNode><ExpandedNode>DEMO/Output</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd2><Wnd3><Tabs><Tab><Identity>TabID-10748-9838</Identity><TabName>Build</TabName><Factory>Build</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd3></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\ILI9163CHN.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>333</SelStart><SelEnd>333</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\show.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>78</SelStart><SelEnd>78</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\Picture.h</Filename><XPos>0</XPos><YPos>192</YPos><SelStart>16333</SelStart><SelEnd>16333</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\stm8s_conf.h</Filename><XPos>0</XPos><YPos>60</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\Project\ILI9163CHN.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>247</SelStart><SelEnd>247</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\SGP18T_ILI9163B_base.h</Filename><XPos>0</XPos><YPos>3</YPos><SelStart>94</SelStart><SelEnd>94</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\Project\ILI9163CHN.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>2415</SelStart><SelEnd>2415</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\SGP18T_ILI9163B_figure.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>1017</SelStart><SelEnd>1017</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\SGP18T_ILI9163B_ascii.c</Filename><XPos>0</XPos><YPos>295</YPos><SelStart>5239</SelStart><SelEnd>5239</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\show.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>338</SelStart><SelEnd>338</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\SGP18T_ILI9163B_CONFIG.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>109</SelStart><SelEnd>109</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\SGP18T_ILI9163B_ascii.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>958</SelStart><SelEnd>958</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sgp18t_ili9163b_figure.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>118</SelStart><SelEnd>118</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\ILI9163.c</Filename><XPos>0</XPos><YPos>183</YPos><SelStart>6371</SelStart><SelEnd>6371</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\main.c</Filename><XPos>0</XPos><YPos>48</YPos><SelStart>2204</SelStart><SelEnd>2204</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\stm8s_it.c</Filename><XPos>0</XPos><YPos>198</YPos><SelStart>4944</SelStart><SelEnd>4944</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\encoder.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>320</SelStart><SelEnd>320</SelEnd></Tab><ActiveTab>16</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\encoder.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>132</SelStart><SelEnd>132</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\ILI9163.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>511</SelStart><SelEnd>511</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\Libraries\STM8S_StdPeriph_Driver\src\stm8s_clk.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>2448</SelStart><SelEnd>2448</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Evaluation\stm8\inc\iostm8s105k6.h</Filename><XPos>0</XPos><YPos>1695</YPos><SelStart>57557</SelStart><SelEnd>57557</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\Libraries\STM8S_StdPeriph_Driver\src\stm8s_gpio.c</Filename><XPos>0</XPos><YPos>186</YPos><SelStart>7234</SelStart><SelEnd>7234</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\Libraries\STM8S_StdPeriph_Driver\inc\stm8s.h</Filename><XPos>0</XPos><YPos>200</YPos><SelStart>9054</SelStart><SelEnd>9054</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\Libraries\STM8S_StdPeriph_Driver\inc\stm8s_gpio.h</Filename><XPos>0</XPos><YPos>61</YPos><SelStart>3281</SelStart><SelEnd>3281</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-00fad7c8><key>iaridepm.enu1</key></Toolbar-00fad7c8></Sizes></Row0></Top><Left><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>614</Bottom><Right>325</Right><x>-2</x><y>-2</y><xscreen>198</xscreen><yscreen>135</yscreen><sizeHorzCX>173532</sizeHorzCX><sizeHorzCY>157526</sizeHorzCY><sizeVertCX>286591</sizeVertCX><sizeVertCY>718786</sizeVertCY></Rect></Wnd2></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>198</Bottom><Right>1143</Right><x>-2</x><y>-2</y><xscreen>1145</xscreen><yscreen>200</yscreen><sizeHorzCX>1003506</sizeHorzCX><sizeHorzCY>233372</sizeHorzCY><sizeVertCX>175285</sizeVertCX><sizeVertCY>233372</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+
