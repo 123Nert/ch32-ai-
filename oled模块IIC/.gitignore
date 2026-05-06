@@ -1,0 +1,20 @@
+# Common build output
+obj/
+
+# MounRiver Studio / Eclipse local metadata
+.mrs/
+.settings/
+
+# Launch / temporary files
+*.launch
+*.log
+*.tmp
+
+# Binary artifacts
+*.o
+*.d
+*.elf
+*.hex
+*.lst
+*.map
+*.siz

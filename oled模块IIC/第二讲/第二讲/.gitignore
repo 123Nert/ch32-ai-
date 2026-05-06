@@ -1,0 +1,20 @@
+# MounRiver Studio / Eclipse generated folders
+obj/
+.mrs/
+.settings/
+
+# Local run / debug files
+*.launch
+
+# Binary artifacts
+*.o
+*.d
+*.elf
+*.hex
+*.lst
+*.map
+*.siz
+
+# Logs and temporary files
+*.log
+*.tmp
